@@ -1,8 +1,8 @@
 package com.danilojakob.m223.punchclock.controller;
 
-import com.danilojakob.m223.punchclock.domain.User;
+import com.danilojakob.m223.punchclock.domain.ApplicationUser;
 import com.danilojakob.m223.punchclock.service.UserService;
-import com.danilojakob.m223.punchclock.util.Encryption;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -25,9 +25,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/signup")
-    public ResponseEntity signUp(@Validated @RequestBody User user) {
-        user.setPassword(encryption.encode(user.getPassword()));
-        userService.saveUser(user);
-        return null;
+    public ResponseEntity signUp(@Validated @RequestBody ApplicationUser applicationUser) {
+        applicationUser.setPassword(encryption.encode(applicationUser.getPassword()));
+        userService.saveUser(applicationUser);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
