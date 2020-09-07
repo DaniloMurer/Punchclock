@@ -1,7 +1,7 @@
-package ch.zli.m223.punchclock.controller;
+package com.danilojakob.m223.punchclock.controller;
 
-import ch.zli.m223.punchclock.domain.Entry;
-import ch.zli.m223.punchclock.service.EntryService;
+import com.danilojakob.m223.punchclock.domain.Entry;
+import com.danilojakob.m223.punchclock.service.EntryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

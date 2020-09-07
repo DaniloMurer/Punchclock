@@ -1,18 +1,16 @@
-package ch.zli.m223.punchclock.domain;
+package com.danilojakob.m223.punchclock.domain;
 
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 1023)
     private String username;
 
-    @Column(nullable = false, length = 256)
     private String password;
 
     public long getId() {
