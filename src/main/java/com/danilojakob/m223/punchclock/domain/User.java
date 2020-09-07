@@ -1,4 +1,4 @@
-package ch.zli.m223.punchclock.domain;
+package com.danilojakob.m223.punchclock.domain;
 
 import javax.persistence.*;
 
@@ -12,7 +12,7 @@ public class User {
     @Column(nullable = false, length = 1023)
     private String username;
 
-    @Column(nullable = false, length = 256)
+    @Column(nullable = false, length = 1023)
     private String password;
 
     public long getId() {

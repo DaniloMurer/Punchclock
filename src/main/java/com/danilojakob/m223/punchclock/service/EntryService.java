@@ -1,10 +1,9 @@
-package ch.zli.m223.punchclock.service;
+package com.danilojakob.m223.punchclock.service;
 
-import ch.zli.m223.punchclock.domain.Entry;
-import ch.zli.m223.punchclock.repository.EntryRepository;
+import com.danilojakob.m223.punchclock.repository.EntryRepository;
+import com.danilojakob.m223.punchclock.domain.Entry;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service

@@ -1,4 +1,4 @@
-package ch.zli.m223.punchclock.domain;
+package com.danilojakob.m223.punchclock.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
