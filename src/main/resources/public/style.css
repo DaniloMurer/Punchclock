@@ -1,0 +1,13 @@
+input {
+    display: block;
+    width: 20rem;
+    box-sizing: border-box;
+}
+
+input[type='submit'], table {
+    margin-top: 1rem;
+}
+
+table {
+    width: 40rem;
+}
