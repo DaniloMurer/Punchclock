@@ -9,10 +9,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 1023)
     private String username;
 
-    @Column(nullable = false, length = 1023)
     private String password;
 
     public long getId() {
