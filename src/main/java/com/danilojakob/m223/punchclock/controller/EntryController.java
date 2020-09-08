@@ -19,15 +19,13 @@ public class EntryController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Entry> getAllEntries() {
-        return entryService.findAll();
+    public ResponseEntity getAllEntries() {
+        return ResponseEntity.status(HttpStatus.OK).body(entryService.findAll());
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Entry createEntry(@Valid @RequestBody Entry entry) {
-        return entryService.createEntry(entry);
+    public ResponseEntity createEntry(@Valid @RequestBody Entry entry) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(entryService.createEntry(entry));
     }
 
     @DeleteMapping("/{id}")
