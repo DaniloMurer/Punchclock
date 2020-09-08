@@ -4,7 +4,6 @@ import com.danilojakob.m223.punchclock.security.JwtAuthenticationFilter;
 import com.danilojakob.m223.punchclock.security.JwtAuthorizationFilter;
 import com.danilojakob.m223.punchclock.security.SecurityConstants;
 import com.danilojakob.m223.punchclock.service.UserDetailsServiceImpl;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
