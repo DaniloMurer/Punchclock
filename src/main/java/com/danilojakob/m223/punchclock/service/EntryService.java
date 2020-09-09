@@ -1,5 +1,6 @@
 package com.danilojakob.m223.punchclock.service;
 
+import com.danilojakob.m223.punchclock.domain.ApplicationUser;
 import com.danilojakob.m223.punchclock.repository.EntryRepository;
 import com.danilojakob.m223.punchclock.domain.Entry;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class EntryService {
 
     public List<Entry> findAll() {
         return entryRepository.findAll();
+    }
+
+    public List<Entry> findAllByApplicationUser(ApplicationUser user) {
+        return entryRepository.findAllByApplicationUser(user);
     }
 
     public void deleteById(Long id) throws Exception {

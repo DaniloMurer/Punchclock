@@ -25,6 +25,12 @@ public class Entry {
     @Column(nullable = false)
     private LocalDateTime checkOut;
 
+    @Column
+    private Boolean confirmed;
+
+    @ManyToOne
+    private ApplicationUser applicationUser;
+
     public Long getId() {
         return id;
     }
@@ -47,5 +53,21 @@ public class Entry {
 
     public void setCheckOut(LocalDateTime checkOut) {
         this.checkOut = checkOut;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public ApplicationUser getApplicationUser() {
+        return applicationUser;
+    }
+
+    public void setApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser;
     }
 }

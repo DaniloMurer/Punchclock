@@ -1,7 +1,9 @@
 package com.danilojakob.m223.punchclock.controller;
 
+import com.danilojakob.m223.punchclock.domain.ApplicationUser;
 import com.danilojakob.m223.punchclock.domain.Entry;
 import com.danilojakob.m223.punchclock.service.EntryService;
+import com.danilojakob.m223.punchclock.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,15 +16,18 @@ import java.util.List;
 @RequestMapping("/entries")
 public class EntryController {
     private EntryService entryService;
+    private UserService userService;
 
-    public EntryController(EntryService entryService) {
+    public EntryController(EntryService entryService, UserService userService) {
+        this.userService = userService;
         this.entryService = entryService;
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
     @GetMapping
-    public ResponseEntity getAllEntries() {
-        return ResponseEntity.status(HttpStatus.OK).body(entryService.findAll());
+    public ResponseEntity getAllEntries(@RequestParam String username) {
+        ApplicationUser applicationUser = userService.findByUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(entryService.findAllByApplicationUser(applicationUser));
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")

@@ -19,6 +19,9 @@ public class ApplicationUser {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @OneToMany
+    private Set<Entry> entries;
+
     public long getId() {
         return id;
     }
@@ -49,5 +52,13 @@ public class ApplicationUser {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Entry> getEntries() {
+        return entries;
+    }
+
+    public void setEntries(Set<Entry> entries) {
+        this.entries = entries;
     }
 }
