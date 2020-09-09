@@ -25,7 +25,7 @@ public class EntryController {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
     @GetMapping
-    public ResponseEntity getAllEntries(@RequestParam String username) {
+    public ResponseEntity getEntries(@RequestParam String username) {
         ApplicationUser applicationUser = userService.findByUsername(username);
         return ResponseEntity.status(HttpStatus.OK).body(entryService.findAllByApplicationUser(applicationUser));
     }
@@ -55,5 +55,17 @@ public class EntryController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity confirmEntry(@PathVariable Long id) {
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("/getAll")
+    public ResponseEntity getAllEntries() {
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
