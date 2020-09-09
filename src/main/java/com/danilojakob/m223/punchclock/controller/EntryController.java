@@ -4,6 +4,7 @@ import com.danilojakob.m223.punchclock.domain.Entry;
 import com.danilojakob.m223.punchclock.service.EntryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,16 +19,19 @@ public class EntryController {
         this.entryService = entryService;
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping
     public ResponseEntity getAllEntries() {
         return ResponseEntity.status(HttpStatus.OK).body(entryService.findAll());
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity createEntry(@Valid @RequestBody Entry entry) {
         return ResponseEntity.status(HttpStatus.CREATED).body(entryService.createEntry(entry));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEntry(@PathVariable Long id) {
         try {
@@ -38,6 +42,7 @@ public class EntryController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
     @PutMapping
     public ResponseEntity updateEntry(@Valid @RequestBody Entry entry) {
         try {

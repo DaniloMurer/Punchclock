@@ -1,6 +1,7 @@
 package com.danilojakob.m223.punchclock.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class ApplicationUser {
@@ -9,9 +10,14 @@ public class ApplicationUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
     public long getId() {
         return id;
@@ -35,5 +41,13 @@ public class ApplicationUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -1,0 +1,1 @@
+insert into role(name) values('EMPLOYEE'), ('ADMINISTRATOR');
