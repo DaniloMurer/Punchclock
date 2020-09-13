@@ -9,5 +9,5 @@ import java.util.List;
 
 @Transactional
 public interface EntryRepository extends JpaRepository<Entry, Long> {
-    List<Entry> findAllByApplicationUser(ApplicationUser applicationUser);
+    List<Entry> findByUsername(String username);
 }

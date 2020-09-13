@@ -23,8 +23,8 @@ public class EntryService {
         return entryRepository.findAll();
     }
 
-    public List<Entry> findAllByApplicationUser(ApplicationUser user) {
-        return entryRepository.findAllByApplicationUser(user);
+    public List<Entry> findByUsername(String username) {
+        return entryRepository.findByUsername(username);
     }
 
     public void deleteById(Long id) throws Exception {

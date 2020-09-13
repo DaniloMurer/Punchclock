@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQuery(name = "Entry.findByUsername", query = "SELECT e FROM Entry e WHERE e.applicationUser.username = ?1")
 public class Entry {
 
     @Id
