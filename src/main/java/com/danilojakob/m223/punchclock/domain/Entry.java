@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQuery(name = "Entry.findByUsername", query = "SELECT e FROM Entry e WHERE e.applicationUser.username = ?1")
 public class Entry {
 
     @Id
@@ -24,6 +25,15 @@ public class Entry {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(nullable = false)
     private LocalDateTime checkOut;
+
+    @Column
+    private Boolean confirmed;
+
+    @ManyToOne
+    private ApplicationUser applicationUser;
+
+    @ManyToOne
+    private Category category;
 
     public Long getId() {
         return id;
@@ -47,5 +57,29 @@ public class Entry {
 
     public void setCheckOut(LocalDateTime checkOut) {
         this.checkOut = checkOut;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public ApplicationUser getApplicationUser() {
+        return applicationUser;
+    }
+
+    public void setApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

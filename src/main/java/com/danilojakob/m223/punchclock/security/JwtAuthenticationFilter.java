@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -42,25 +44,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
         User applicationUser = (User) auth.getPrincipal();
-        SimpleGrantedAuthority[] authorities = applicationUser.getAuthorities().toArray(new SimpleGrantedAuthority[applicationUser.getAuthorities().size()]);
-        String[] roleNames = new String[authorities.length];
-        for (int i = 0; i < roleNames.length; i++) {
-            roleNames[i] = authorities[i].getAuthority();
-        }
+        String authorities = applicationUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+
         String token = JWT.create().withSubject(applicationUser.getUsername())
-                .withArrayClaim("roles", roleNames)
+                .withClaim("roles", authorities)
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_DATE))
                     .sign(Algorithm.HMAC256(SecurityConstants.SECRET.getBytes()));
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
     }
-
-    private Set getAuthorities(ApplicationUser applicationUser) {
-        Set authorities = new HashSet();
-        applicationUser.getRoles().forEach( role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-        });
-        return authorities;
-    }
-
 }
