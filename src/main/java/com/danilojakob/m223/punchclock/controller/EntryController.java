@@ -28,12 +28,23 @@ public class EntryController {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Get user specific entries
+     * @param principal {@link Principal} Principal of the user (JWT Token)
+     * @return {@link ResponseEntity} with Status Code and all user specific entries
+     */
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @GetMapping
     public ResponseEntity getEntries(Principal principal) {
         return ResponseEntity.status(HttpStatus.OK).body(entryService.findByUsername(principal.getName()));
     }
 
+    /**
+     * Create a new Entry
+     * @param entry {@link Entry} to create
+     * @param principal {@link Principal} Principal of the user (JWT Token)
+     * @return {@link ResponseEntity} with Status Code and created Entry
+     */
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity createEntry(@Valid @RequestBody Entry entry, Principal principal) {
@@ -48,6 +59,11 @@ public class EntryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(entryService.createEntry(entry));
     }
 
+    /**
+     * Delete Enrty
+     * @param id {@link Long} id of the Entry to delete
+     * @return {@link ResponseEntity} with Status Code
+     */
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEntry(@PathVariable Long id) {
@@ -59,6 +75,12 @@ public class EntryController {
         }
     }
 
+    /**
+     * Update Entry
+     * @param entry {@link Entry} entry to update
+     * @param principal {@link Principal} principal of the user (JWT Token)
+     * @return {@link ResponseEntity} with Status code and updated entry
+     */
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PutMapping
     public ResponseEntity updateEntry(@Valid @RequestBody Entry entry, Principal principal) {
@@ -73,12 +95,21 @@ public class EntryController {
         }
     }
 
+    /**
+     * Set an entry as confirmed
+     * @param id {@link Long} id of the entry to confirm
+     * @return {@link ResponseEntity} with Status Code and confirmed Entry
+     */
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping("/confirm/{id}")
     public ResponseEntity confirmEntry(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(entryService.confirmEntry(id));
     }
 
+    /**
+     * Get all Entries from database regardless of the current user
+     * @return {@link ResponseEntity} with Status Code and all entries
+     */
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @GetMapping("/getAll")
     public ResponseEntity getAllEntries() {

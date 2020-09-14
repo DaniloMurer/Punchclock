@@ -18,6 +18,10 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    /**
+     * Get All Roles from database
+     * @return {@link ResponseEntity} with Status Code and all roles
+     */
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @GetMapping
     public ResponseEntity getAllRoles() {
