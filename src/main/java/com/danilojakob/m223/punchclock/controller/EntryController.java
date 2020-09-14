@@ -1,8 +1,10 @@
 package com.danilojakob.m223.punchclock.controller;
 
 import com.danilojakob.m223.punchclock.domain.ApplicationUser;
+import com.danilojakob.m223.punchclock.domain.Category;
 import com.danilojakob.m223.punchclock.domain.Entry;
 import com.danilojakob.m223.punchclock.exceptions.ConfirmedException;
+import com.danilojakob.m223.punchclock.service.CategoryService;
 import com.danilojakob.m223.punchclock.service.EntryService;
 import com.danilojakob.m223.punchclock.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,10 +20,12 @@ import java.security.Principal;
 public class EntryController {
     private EntryService entryService;
     private UserService userService;
+    private CategoryService categoryService;
 
-    public EntryController(EntryService entryService, UserService userService) {
+    public EntryController(EntryService entryService, UserService userService, CategoryService categoryService) {
         this.userService = userService;
         this.entryService = entryService;
+        this.categoryService = categoryService;
     }
 
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
@@ -34,6 +38,9 @@ public class EntryController {
     @PostMapping
     public ResponseEntity createEntry(@Valid @RequestBody Entry entry, Principal principal) {
 
+        // Get Category
+        Category category = categoryService.findByName(entry.getCategory().getName());
+        entry.setCategory(category);
         // Get the user from the request and add it to the entry
         ApplicationUser applicationUser = userService.findByUsername(principal.getName());
         entry.setApplicationUser(applicationUser);
@@ -54,8 +61,12 @@ public class EntryController {
 
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PutMapping
-    public ResponseEntity updateEntry(@Valid @RequestBody Entry entry) {
+    public ResponseEntity updateEntry(@Valid @RequestBody Entry entry, Principal principal) {
+        ApplicationUser user = userService.findByUsername(principal.getName());
+        Category category = categoryService.findByName(entry.getCategory().getName());
         try {
+            entry.setCategory(category);
+            entry.setApplicationUser(user);
             return ResponseEntity.status(HttpStatus.OK).body(entryService.updateEntry(entry));
         } catch (ConfirmedException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
