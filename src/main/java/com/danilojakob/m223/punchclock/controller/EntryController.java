@@ -22,19 +22,19 @@ public class EntryController {
         this.entryService = entryService;
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @GetMapping
     public ResponseEntity getEntries(Principal principal) {
         return ResponseEntity.status(HttpStatus.OK).body(entryService.findByUsername(principal.getName()));
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity createEntry(@Valid @RequestBody Entry entry) {
         return ResponseEntity.status(HttpStatus.CREATED).body(entryService.createEntry(entry));
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEntry(@PathVariable Long id) {
         try {
@@ -45,7 +45,7 @@ public class EntryController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PutMapping
     public ResponseEntity updateEntry(@Valid @RequestBody Entry entry) {
         try {
@@ -55,13 +55,13 @@ public class EntryController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping("/confirm/{id}")
     public ResponseEntity confirmEntry(@PathVariable Long id) {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @GetMapping("/getAll")
     public ResponseEntity getAllEntries() {
         return new ResponseEntity(HttpStatus.OK);

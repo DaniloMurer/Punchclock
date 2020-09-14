@@ -4,6 +4,7 @@ import com.danilojakob.m223.punchclock.security.JwtAuthenticationFilter;
 import com.danilojakob.m223.punchclock.security.JwtAuthorizationFilter;
 import com.danilojakob.m223.punchclock.security.SecurityConstants;
 import com.danilojakob.m223.punchclock.service.UserDetailsServiceImpl;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,9 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsService;
@@ -30,14 +31,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SING_UP_URL).permitAll()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/*.html").permitAll()
-                .antMatchers(HttpMethod.GET, "/*.js").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsService))
                 // Disable Spring Session Creation
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable()
