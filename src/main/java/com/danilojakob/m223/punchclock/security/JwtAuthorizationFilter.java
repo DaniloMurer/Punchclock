@@ -38,10 +38,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 
         if (token != null) {
-            DecodedJWT jwt = JWT.require(Algorithm.HMAC256(SecurityConstants.SECRET.getBytes()))
-                    .build()
-                    .verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
-
             String user = JWT.require(Algorithm.HMAC256(SecurityConstants.SECRET.getBytes()))
                     .build()
                     .verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""))

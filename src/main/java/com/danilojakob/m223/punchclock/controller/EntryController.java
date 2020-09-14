@@ -1,6 +1,8 @@
 package com.danilojakob.m223.punchclock.controller;
 
+import com.danilojakob.m223.punchclock.domain.ApplicationUser;
 import com.danilojakob.m223.punchclock.domain.Entry;
+import com.danilojakob.m223.punchclock.exceptions.ConfirmedException;
 import com.danilojakob.m223.punchclock.service.EntryService;
 import com.danilojakob.m223.punchclock.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,12 @@ public class EntryController {
 
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @PostMapping
-    public ResponseEntity createEntry(@Valid @RequestBody Entry entry) {
+    public ResponseEntity createEntry(@Valid @RequestBody Entry entry, Principal principal) {
+
+        // Get the user from the request and add it to the entry
+        ApplicationUser applicationUser = userService.findByUsername(principal.getName());
+        entry.setApplicationUser(applicationUser);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(entryService.createEntry(entry));
     }
 
@@ -40,7 +47,7 @@ public class EntryController {
         try {
             entryService.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (Exception ex) {
+        } catch (ConfirmedException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
@@ -50,7 +57,7 @@ public class EntryController {
     public ResponseEntity updateEntry(@Valid @RequestBody Entry entry) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(entryService.updateEntry(entry));
-        } catch (Exception ex) {
+        } catch (ConfirmedException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
@@ -58,12 +65,12 @@ public class EntryController {
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping("/confirm/{id}")
     public ResponseEntity confirmEntry(@PathVariable Long id) {
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(entryService.confirmEntry(id));
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @GetMapping("/getAll")
     public ResponseEntity getAllEntries() {
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(entryService.findAll());
     }
 }
