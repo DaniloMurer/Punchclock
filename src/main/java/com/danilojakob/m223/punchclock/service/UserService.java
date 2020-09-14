@@ -4,6 +4,8 @@ import com.danilojakob.m223.punchclock.domain.ApplicationUser;
 import com.danilojakob.m223.punchclock.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -31,5 +33,13 @@ public class UserService {
      */
     public void saveUser(ApplicationUser applicationUser) {
         userRepository.saveAndFlush(applicationUser);
+    }
+
+    public List<ApplicationUser> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
  }

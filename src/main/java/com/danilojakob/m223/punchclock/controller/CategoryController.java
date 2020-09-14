@@ -37,4 +37,10 @@ public class CategoryController {
     public ResponseEntity updateCategory(@Valid @RequestBody Category category) {
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.updateCategory(category));
     }
+
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @PostMapping
+    public ResponseEntity createCategory(@Valid @RequestBody Category category) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(category));
+    }
 }
