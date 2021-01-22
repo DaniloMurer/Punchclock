@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 	id 'idea'
+	id 'war'
 }
 
 group = 'com.danilojakob.m223'
