@@ -36,6 +36,14 @@ public class EntryService {
         entryRepository.deleteById(id);
     }
 
+    public Entry findByApplicationUserId(Long id) {
+        return entryRepository.findByApplicationUserId(id);
+    }
+
+    public Entry findById(Long id) {
+        return entryRepository.findById(id).get();
+    }
+
     /**
      * Confirm an entry
      * @param id {@link Long} id of the entry

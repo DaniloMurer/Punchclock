@@ -66,7 +66,15 @@ public class EntryController {
      */
     @PreAuthorize("hasAnyAuthority('EMPLOYEE', 'ADMINISTRATOR')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteEntry(@PathVariable Long id) {
+    public ResponseEntity deleteEntry(@PathVariable Long id, Principal principal) {
+
+        Entry entryToUpdate = entryService.findById(id);
+        ApplicationUser user = userService.findByUsername(principal.getName());
+
+        if (entryToUpdate.getApplicationUser().getId() != user.getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot delete entry from another User!");
+        }
+
         try {
             entryService.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -86,6 +94,15 @@ public class EntryController {
     public ResponseEntity updateEntry(@Valid @RequestBody Entry entry, Principal principal) {
         ApplicationUser user = userService.findByUsername(principal.getName());
         Category category = categoryService.findByName(entry.getCategory().getName());
+        Entry entryToUpdate = entryService.findById(entry.getId());
+
+        if (entryToUpdate.getApplicationUser().getId() != user.getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot udpate Entry of another User!");
+        }
+
+        if (entry.getConfirmed() != entryToUpdate.getConfirmed()) {
+            entry.setConfirmed(entryToUpdate.getConfirmed());
+        }
         try {
             entry.setCategory(category);
             entry.setApplicationUser(user);

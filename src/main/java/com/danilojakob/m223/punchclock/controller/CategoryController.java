@@ -49,6 +49,10 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping
     public ResponseEntity updateCategory(@Valid @RequestBody Category category) {
+        Category checkCategory = categoryService.findByName(category.getName());
+        if (checkCategory == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot udpdate non existend category");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.updateCategory(category));
     }
 
